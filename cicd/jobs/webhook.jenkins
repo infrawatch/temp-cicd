@@ -1,0 +1,37 @@
+#!/usr/bin/env groovy
+
+pipelineJob('webhook-test') {
+    displayName('GitHub Webhook Trigger Test')
+
+    logRotator {
+        numToKeep(10)
+        daysToKeep(30)
+    }
+
+    configure { project ->
+        project / 'properties' / 'org.infrawatch.plugins.workflow.job.properties.DurabilityHintJobProperty' {
+            hint('PERFORMANCE_OPTIMIZED')
+        }
+    }
+
+    configure { project ->
+        project / 'properties' / 'com.coravy.hudson.plugins.github.GithubProjectProperty' {
+            projectUrl('https://github.com/infrawatch/temp-cicd.git/')
+            displayName('')
+        }
+    }
+
+    definition {
+        cpsScm {
+            scm {
+                git {
+                    remote {
+                        url('https://github.com/infrawatch/temp-cicd.git')
+                    }
+                    branches('*/main')
+                }
+            }
+            scriptPath('cicd/pipelines/k8s.jenkins')
+        }
+    }
+}
