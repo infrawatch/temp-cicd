@@ -21,6 +21,13 @@ pipelineJob('webhook-test') {
         }
     }
 
+    configure { project ->
+        project / 'properties' / 'org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty' / 'triggers' / 'com.cloudbees.jenkins.GitHubPushTrigger' {
+            spec('')
+        }
+    }
+
+
     definition {
         cpsScm {
             scm {
