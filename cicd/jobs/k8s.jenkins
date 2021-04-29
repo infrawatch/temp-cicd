@@ -9,7 +9,7 @@ pipelineJob('k8s-e2e') {
     }
 
     configure { project ->
-        project / 'properties' / 'org.jenkinsci.plugins.workflow.job.properties.DurabilityHintJobProperty' {
+        project / 'properties' / 'org.infrawatch.plugins.workflow.job.properties.DurabilityHintJobProperty' {
             hint('PERFORMANCE_OPTIMIZED')
         }
     }
@@ -19,10 +19,10 @@ pipelineJob('k8s-e2e') {
             scm {
                 git {
                     remote {
-                        url('https://github.com/jenkinsci/kubernetes-operator.git')
+                        url('https://github.com/infrawatch/temp-cicd.git')
                         credentials('jenkins-operator')
                     }
-                    branches('*/master')
+                    branches('*/main')
                 }
             }
             scriptPath('cicd/pipelines/k8s.jenkins')
