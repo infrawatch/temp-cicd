@@ -20,7 +20,6 @@ pipelineJob('k8s-e2e') {
                 git {
                     remote {
                         url('https://github.com/infrawatch/temp-cicd.git')
-                        credentials('jenkins-operator')
                     }
                     branches('*/main')
                 }
