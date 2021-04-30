@@ -1,20 +1,19 @@
-pipeline {
-    agent any
+#!/usr/bin/env groovy
 
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building..'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
+def label = "k8s-${UUID.randomUUID().toString()}"
+def home = "/home/jenkins"
+def workspace = "${home}/workspace/build-jenkins-operator"
+def workdir = "${workspace}/src/github.com/infrawatch/temp-cicd/"
+
+podTemplate(label: label,
+        containers: [
+                containerTemplate(name: 'fedora', image: 'quay.io/fedora/fedora:34-x86_64', ttyEnabled: true, command: 'cat'),
+        ],
+        ) {
+    node(label) {
+        stage('Run shell') {
+            container('fedora') {
+                sh 'echo "hello world"'
             }
         }
     }
