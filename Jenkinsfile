@@ -5,12 +5,12 @@ def workdir = "${workspace}/src/github.com/infrawatch/temp-cicd/"
 
 podTemplate(label: label,
         containers: [
-                containerTemplate(name: 'alpine', image: 'alpine:3.11', ttyEnabled: true, command: 'cat'),
+                containerTemplate(name: 'fedora', image: 'quay.io/fedora/fedora:34-x86_64', ttyEnabled: true, command: 'cat'),
         ],
         ) {
     node(label) {
         stage('Run shell') {
-            container('alpine') {
+            container('fedora') {
                 sh 'echo "hello world"'
             }
         }
