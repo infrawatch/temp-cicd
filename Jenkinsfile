@@ -1,21 +1,29 @@
-pipeline {
-    agent any
+pipelineJob('k8s-e2e') {
+    displayName('temp-cicd main job')
 
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building..'
-            }
+    logRotator {
+        numToKeep(10)
+        daysToKeep(30)
+    }
+
+    configure { project ->
+        project / 'properties' / 'org.infrawatch.plugins.workflow.job.properties.DurabilityHintJobProperty' {
+            hint('PERFORMANCE_OPTIMIZED')
         }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
+    }
+
+    definition {
+        cpsScm {
+            scm {
+                git {
+                    remote {
+                        url('https://github.com/infrawatch/temp-cicd.git')
+                    }
+                    branches('*/main')
+                }
             }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-            }
+            scriptPath('cicd/pipelines/k8s.jenkins')
         }
     }
 }
+
