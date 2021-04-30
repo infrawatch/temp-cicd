@@ -1,29 +1,18 @@
-pipelineJob('k8s-e2e') {
-    displayName('temp-cicd main job')
+def label = "k8sagent-e2e"
+def home = "/home/jenkins"
+def workspace = "${home}/workspace/build-jenkins-operator"
+def workdir = "${workspace}/src/github.com/infrawatch/temp-cicd/"
 
-    logRotator {
-        numToKeep(10)
-        daysToKeep(30)
-    }
-
-    configure { project ->
-        project / 'properties' / 'org.infrawatch.plugins.workflow.job.properties.DurabilityHintJobProperty' {
-            hint('PERFORMANCE_OPTIMIZED')
-        }
-    }
-
-    definition {
-        cpsScm {
-            scm {
-                git {
-                    remote {
-                        url('https://github.com/infrawatch/temp-cicd.git')
-                    }
-                    branches('*/main')
-                }
+podTemplate(label: label,
+        containers: [
+                containerTemplate(name: 'alpine', image: 'alpine:3.11', ttyEnabled: true, command: 'cat'),
+        ],
+        ) {
+    node(label) {
+        stage('Run shell') {
+            container('alpine') {
+                sh 'echo "hello world"'
             }
-            scriptPath('cicd/pipelines/k8s.jenkins')
         }
     }
 }
-
