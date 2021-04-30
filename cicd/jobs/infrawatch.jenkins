@@ -1,0 +1,75 @@
+jobs:
+  - script: >
+      organizationFolder('InfraWatch') {
+        description("InfraWatch GitHub Organization")
+        displayName('infrawatch')
+
+        // "Projects"
+        organizations {
+          github {
+            apiUri("https://api.github.com")
+            repoOwner("infrawatch")
+            credentialsId("github-app")
+          }
+        }
+
+        configure { node ->
+            def traits = node / navigators / 'org.jenkinsci.plugins.github__branch__source.GitHubSCMNavigator' / traits
+
+            // Discover branches
+            traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
+                strategyId(1)
+                // Values
+                //  1 : Exclude branches that are also filed as PRs
+                //  2 : Only branches that are also filed as PRs
+                //  3 : All branches
+            }
+            // Discover pull requests from origin
+            traits << 'org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait' {
+                strategyId(1)
+                // Values
+                // 1 : Merging the pull request with the current target branch revision
+                // 2 : The current pull request revision
+                // 3 : Both the current pull request revision and the pull request merged with the current target branch revision
+            }
+            // Discover pull requests from forks
+            traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
+                strategyId(1)
+                // Values
+                // 1 : Merging the pull request with the current target branch revision
+                // 2 : The current pull request revision
+                // 3 : Both the current pull request revision and the pull request merged with the current target branch revision
+
+                trustID('1')
+                // Values
+                // 0 : Everyone
+                // 1 : Forks in the same account
+                // 2 : Nobody
+            }
+        }
+
+        // "Project Recognizers"
+        projectFactories {
+            workflowMultiBranchProjectFactory {
+                scriptPath 'Jenkinsfile'
+            }
+        }
+
+        // "Orphaned Item Strategy"
+        orphanedItemStrategy {
+          discardOldItems {
+            daysToKeep(-1)
+            numToKeep(-1)
+          }
+        }
+
+        // "Scan Organization Folder Triggers" : 1 day
+        // We need to configure this stuff by hand because JobDSL only allow 'periodic(int min)' for now
+        configure { node ->
+          node / triggers / 'com.cloudbees.hudson.plugins.folder.computed.PeriodicFolderTrigger' {
+            spec('H H * * *')
+            interval(86400000)
+          }
+        }
+      }
+# vim: set ft=groovy:
