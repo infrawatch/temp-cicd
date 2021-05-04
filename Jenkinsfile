@@ -11,9 +11,10 @@ podTemplate(label: label,
         ],
         ) {
     node(label) {
-        stage('Run shell') {
+        stage('Checkout code') {
             container('fedora') {
-                sh 'echo "hello world"'
+                checkout scm
+                sh 'ls -lah'
             }
         }
     }
