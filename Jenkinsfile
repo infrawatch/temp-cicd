@@ -16,10 +16,8 @@ podTemplate(label: label,
                 checkout scm
                 withEnv(["PATH+OC=${tool 'oc'}"]) {
                     openshift.withCluster() {
-                        openshift.withProject( 'service-telemetry-ci' ) {
-                            echo "${openshift.raw( "status" ).out}"
-                            echo "In project: ${openshift.project()}"
-                        }
+                        echo "${openshift.raw( "status" ).out}"
+                        echo "In project: ${openshift.project()}"
                     }
                 }
                 sh 'ls -lah'
