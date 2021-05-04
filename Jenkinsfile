@@ -1,15 +1,8 @@
 node('master') {
-    checkout scm
-    stage('approval') {
-        timeout(time: 30, unit: 'DAYS') {
-                input message: "Start first rollout ?"
-            }
-    }
-    stage('hello world') {
+    withEnv(["PATH+OC=${tool 'oc'}"]) {
         openshift.withCluster() {
-            openshift.withProject( 'myproject' ) {
-                echo "Hello from project ${openshift.project()} in cluster ${openshift.cluster()}"
-            }
+            echo "${openshift.raw( "version" ).out}"
+            echo "In project: ${openshift.project()}"
         }
     }
 }
