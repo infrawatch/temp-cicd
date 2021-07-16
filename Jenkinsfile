@@ -1,15 +1,17 @@
+properties([
+    pipelineTriggers([
+        issueCommentTrigger('.*run test')
+    ])
+])
+
 node('master') {
     checkout scm
-    stage('approval') {
-        timeout(time: 30, unit: 'DAYS') {
-                input message: "Start first rollout ?"
-            }
-    }
-    stage('hello world') {
-        openshift.withCluster() {
-            openshift.withProject( 'myproject' ) {
-                echo "$payload"
-            }
+    stage('triggers') {
+        def triggerCause = currentBuild.rawBuild.getCause(org.jenkinsci.plugins.pipeline.github.trigger.IssueCommentCause) 
+        if (triggerCause) {
+            echo("Build started by ${triggerCause.userLogin}, sob wrote \"${triggerCause.comment}\"")
+        } else {
+            echo("build not start by a trigger")
         }
     }
 }
