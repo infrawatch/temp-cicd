@@ -23,11 +23,15 @@ node('master'){
     stage('Check Validity'){
         checkout scm 
         
-        def newJFile = readFile(file: 'Jenkinsfile')
-        if (newJFile == resp.content) {
-            println "files match"
-        } else {
-            "files don't match"
+    }
+    stage('Check'){
+        script {
+            def newJFile = readFile(file: 'Jenkinsfile')
+            if (newJFile == resp.content) {
+                println "files match"
+            } else {
+                "files don't match"
+            }
         }
     }
 }
