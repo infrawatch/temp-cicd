@@ -12,5 +12,5 @@ if (triggerCause) {
 }
 
 if (env.CHANGE_ID) {
-    pullRequest.addLabel('Build Failed')
+    pullRequest.addLabel('bug')
 }
