@@ -10,3 +10,7 @@ if (triggerCause) {
 } else {
     echo("build not start by a trigger")
 }
+
+if (env.CHANGE_ID) {
+    pullRequest.addLabel('Build Failed')
+}
