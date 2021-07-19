@@ -30,7 +30,7 @@ node('master'){
             if (newJFile == resp.content) {
                 println "files match"
             } else {
-                "files don't match"
+                println "files don't match"
             }
         }
     }
