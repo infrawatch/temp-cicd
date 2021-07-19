@@ -10,14 +10,9 @@ if (triggerCause) {
     println triggerCause
     
     // get Jenkinsfile in branch master
-    def url = new URL('https://raw.githubusercontent.com/infrawatch/service-telemetry-operator/master/Makefile')
-    def connection = url.openConnection()
-    connection.reequestMethod = 'GET'
-    if (connection.responseCodee == 200) {
-        println connection.content.text
-    } else {
-        println "Failed to get Jenkinsfile at master"
-    }
+    def resp = httpRequest 'https://raw.githubusercontent.com/infrawatch/service-telemetry-operator/master/Makefile'
+    println("status: " + resp.status)
+    println("content: " + resp.content)
 
 } else {
     echo('Build was not started by a trigger')
