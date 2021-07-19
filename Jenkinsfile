@@ -10,7 +10,7 @@ if (triggerCause) {
     println triggerCause
 }
 
-def triggerCause = currentBuild.rawBuild.getCause(org.jenkinsci.plugins.pipeline.github.trigger.PullRequestReviewCause)
+triggerCause = currentBuild.rawBuild.getCause(org.jenkinsci.plugins.pipeline.github.trigger.PullRequestReviewCause)
 if (triggerCause) {
     echo("Build was started by ${triggerCause.userLogin}, who reviewed the PR: " +
          "\"${triggerCause.state}\", which matches one of " +
