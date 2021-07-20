@@ -8,13 +8,9 @@ def resp = httpRequest 'https://raw.githubusercontent.com/infrawatch/service-tel
 println("status: " + resp.status)
 println("content: " + resp.content)
 
-def triggerCause = currentBuild.rawBuild.getCause(org.jenkinsci.plugins.pipeline.github.trigger.IssueCommentCause) 
+def triggerCause = currentBuild.rawBuild.getCause(com.adobe.jenkins.github_pr_comment_buildi.GitHubPullRequestCommentCause) 
 if (triggerCause) {
-    echo("Build started by ${triggerCause.userLogin}, sob wrote \"${triggerCause.comment}\"")
-    println triggerCause
-    
-    // get Jenkinsfile in branch master
-
+    echo("Comment URL ${triggerCause.commentUrl}, sob wrote \"${triggerCause.commentBody}\"")
 } else {
     echo('Build was not started by a trigger')
 }
