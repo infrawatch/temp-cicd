@@ -14,7 +14,7 @@ def isComment() {
 def isReview() {
     def triggerCause = currentBuild.rawBuild.getCause(com.adobe.jenkins.github_pr_comment_build.GitHubPullRequestReviewCause) 
     if (triggerCause) {
-        echo("Review URL ${triggerCause.pullRequestURL}")
+        echo("Review URL ${triggerCause.pullRequestUrl}")
     }
 }
 
