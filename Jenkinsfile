@@ -2,12 +2,17 @@ def resp = httpRequest 'https://raw.githubusercontent.com/infrawatch/service-tel
 println("status: " + resp.status)
 println("content: " + resp.content)
 
-def triggerCause = currentBuild.rawBuild.getCause(com.adobe.jenkins.github_pr_comment_build.GitHubPullRequestCommentCause) 
-if (triggerCause) {
-    echo("Comment URL ${triggerCause.commentUrl}, sob wrote \"${triggerCause.commentBody}\"")
-} else {
-    echo('Build was not started by a trigger')
+@NonCPS
+def getCause() {
+    def triggerCause = currentBuild.rawBuild.getCause(com.adobe.jenkins.github_pr_comment_build.GitHubPullRequestCommentCause) 
+    if (triggerCause) {
+        echo("Comment URL ${triggerCause.commentUrl}, sob wrote \"${triggerCause.commentBody}\"")
+    } else {
+        echo('Build was not started by a trigger')
+    }
 }
+
+getCause()
 
 // node('master'){
 //     stage('Check Validity'){
