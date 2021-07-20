@@ -9,19 +9,19 @@ if (triggerCause) {
     echo('Build was not started by a trigger')
 }
 
-node('master'){
-    stage('Check Validity'){
-        checkout scm 
-        
-    }
-    stage('Check'){
-        script {
-            def newJFile = readFile(file: 'Jenkinsfile')
-            if (newJFile == resp.content) {
-                println "files match"
-            } else {
-                println "files don't match"
-            }
-        }
-    }
-}
+// node('master'){
+//     stage('Check Validity'){
+//         checkout scm 
+//         
+//     }
+//     stage('Check'){
+//         script {
+//             def newJFile = readFile(file: 'Jenkinsfile')
+//             if (newJFile == resp.content) {
+//                 println "files match"
+//             } else {
+//                 println "files don't match"
+//             }
+//         }
+//     }
+// }
