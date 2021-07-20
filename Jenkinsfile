@@ -3,30 +3,37 @@ println("status: " + resp.status)
 println("content: " + resp.content)
 
 @NonCPS
-def getCause() {
+def isComment() {
     def triggerCause = currentBuild.rawBuild.getCause(com.adobe.jenkins.github_pr_comment_build.GitHubPullRequestCommentCause) 
     if (triggerCause) {
         echo("Comment URL ${triggerCause.commentUrl}, sob wrote \"${triggerCause.commentBody}\"")
-    } else {
-        echo('Build was not started by a trigger')
     }
 }
 
-getCause()
+@NonCPS
+def isReview() {
+    def triggerCause = currentBuild.rawBuild.getCause(com.adobe.jenkins.github_pr_comment_build.GitHubPullRequestReviewCause) 
+    if (triggerCause) {
+        echo("Review URL ${triggerCause.pullRequestURL}")
+    }
+}
 
-// node('master'){
-//     stage('Check Validity'){
-//         checkout scm 
-//         
-//     }
-//     stage('Check'){
-//         script {
-//             def newJFile = readFile(file: 'Jenkinsfile')
-//             if (newJFile == resp.content) {
-//                 println "files match"
-//             } else {
-//                 println "files don't match"
-//             }
-//         }
-//     }
-// }
+isComment()
+isReview()
+
+node('master'){
+    stage('Check Validity'){
+        checkout scm 
+        
+    }
+    stage('Check'){
+        script {
+            def newJFile = readFile(file: 'Jenkinsfile')
+            if (newJFile == resp.content) {
+                println "files match"
+            } else {
+                println "files don't match"
+            }
+        }
+    }
+}
