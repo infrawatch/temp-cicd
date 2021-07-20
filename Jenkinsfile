@@ -8,7 +8,7 @@ def resp = httpRequest 'https://raw.githubusercontent.com/infrawatch/service-tel
 println("status: " + resp.status)
 println("content: " + resp.content)
 
-def triggerCause = currentBuild.rawBuild.getCause(com.adobe.jenkins.github_pr_comment_buildi.GitHubPullRequestCommentCause) 
+def triggerCause = currentBuild.rawBuild.getCause(com.adobe.jenkins.github_pr_comment_build.GitHubPullRequestCommentCause) 
 if (triggerCause) {
     echo("Comment URL ${triggerCause.commentUrl}, sob wrote \"${triggerCause.commentBody}\"")
 } else {
