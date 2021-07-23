@@ -1,4 +1,5 @@
 def resp = httpRequest 'https://raw.githubusercontent.com/infrawatch/service-telemetry-operator/master/Makefile'
+
 println("status: " + resp.status)
 println("content: " + resp.content)
 
