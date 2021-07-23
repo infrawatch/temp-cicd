@@ -3,12 +3,6 @@ def resp = httpRequest 'https://raw.githubusercontent.com/infrawatch/service-tel
 println("status: " + resp.status)
 println("content: " + resp.content)
 
-properties([
-    pipelineTriggers([
-        issueCommentTrigger(".*")
-    ])
-])
-
 @NonCPS
 def isComment() {
     def triggerCause = currentBuild.rawBuild.getCause(com.adobe.jenkins.github_pr_comment_build.GitHubPullRequestCommentCause) 
