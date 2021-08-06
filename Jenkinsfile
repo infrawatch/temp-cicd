@@ -4,19 +4,14 @@
 
 node('master') {
     checkout scm
-    stage('set Jenkins properties') {
-        properties([
-            pipelineTriggers([
-                issueCommentTrigger('.*run test')
-            ])
-        ])
-    }
-    stage('triggers') {
-        def triggerCause = currentBuild.rawBuild.getCause(org.jenkinsci.plugins.pipeline.github.trigger.IssueCommentCause) 
-        if (triggerCause) {
-            echo("Build started by ${triggerCause.userLogin}, sob wrote \"${triggerCause.comment}\"")
-        } else {
-            echo("build not start by a trigger")
-        }
+    stage('auto merge'){
+        sh """
+            git fetch origin
+            git checkout -b ${env.BRANCH_NAME} origin/${env.BRANCH_NAME}
+            git merge ${env.CHANGE_TARGET}
+            git checkout ${env.CHANGE_TARGET}
+            git merge --no-ff ${env.BRANCH_NAME}
+            git push origin ${env.CHANGE_TARGET}
+        """
     }
 }
