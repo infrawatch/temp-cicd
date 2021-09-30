@@ -16,5 +16,8 @@ podTemplate(label: label,
                 sh 'echo "hello world"'
             }
         }
+        stage('Check files'){
+          sh ''
+        }
     }
 }
