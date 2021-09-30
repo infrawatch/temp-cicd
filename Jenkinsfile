@@ -2,14 +2,9 @@
 
 node {
     stage("One"){
-        def local_branch = sh (
-            script: "git rev-parse --abbrev-ref HEAD",
-            returnStdout: true
-            ).trim()
-        println "Local branch is ${local_branch}"
         
         def git_diff = sh (
-            script: "git diff --name-only HEAD~1",
+            script: "git diff --name-only origin/aveselov-test..HEAD",
             returnStdout: true
         ).trim()
         println git_diff
