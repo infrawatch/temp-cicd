@@ -2,7 +2,7 @@
 
 node {
     stage("One"){
-        sh script: "git fetch origin --no-tags aveselov-test", label: "Getting branch"
+        sh script: "git fetch upstream --no-tags aveselov-test", label: "Getting branch"
         def git_diff = sh (
             script: "git diff --name-only HEAD~1",
             returnStdout: true
