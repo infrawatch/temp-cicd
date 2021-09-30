@@ -2,7 +2,12 @@
 
 node {
     stage("One"){
-        sh script: "git fetch upstream --no-tags aveselov-test", label: "Getting branch"
+        def local_branch = sh (
+            script: "git rev-parse --abbrev-ref HEAD",
+            returnStdout: true
+            ).trim()
+        println "Local branch is ${local_branch}"
+        
         def git_diff = sh (
             script: "git diff --name-only HEAD~1",
             returnStdout: true
