@@ -1,0 +1,69 @@
+apiVersion: infra.watch/v1beta1
+kind: ServiceTelemetry
+metadata:
+  name: default
+  namespace: ${namespace}
+spec:
+  alerting:
+    alertmanager:
+      storage:
+        strategy: ephemeral
+      receivers:
+        snmpTraps:
+          enabled: true
+  backends:
+    events:
+      elasticsearch:
+        enabled: true
+        storage:
+          strategy: ephemeral
+    metrics:
+      prometheus:
+        enabled: true
+        storage:
+          strategy: ephemeral
+  transports:
+    qdr:
+      enabled: true
+      deploymentSize: 1
+      web:
+        enabled: false
+  elasticsearchManifest: |
+    apiVersion: elasticsearch.k8s.elastic.co/v1
+    kind: Elasticsearch
+    metadata:
+      name: elasticsearch
+      namespace: $namespace
+    spec:
+      version: 7.10.2
+      volumeClaimDeletePolicy: DeleteOnScaledownAndClusterDeletion
+      http:
+        tls:
+          certificate:
+            secretName: 'elasticsearch-es-cert'
+      nodeSets:
+        - config:
+            node.roles:
+              - master
+              - data
+              - ingest
+            node.store.allow_mmap: true
+          count: 1
+          name: default
+          podTemplate:
+            metadata:
+              labels:
+                tuned.openshift.io/elasticsearch: elasticsearch
+            spec:
+              containers:
+                - name: elasticsearch
+                  resources:
+                    limits:
+                      cpu: '2'
+                      memory: 2Gi
+                    requests:
+                      cpu: '1'
+                      memory: 1Gi
+              volumes:
+                - emptyDir: {}
+                  name: elasticsearch-data
