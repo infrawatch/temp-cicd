@@ -1,2 +1,2 @@
 # temp-cicd 
-Temporary CI/CD repository for triggering and testing jobs. lol
+Temporary CI/CD repository for triggering and testing jobs.
